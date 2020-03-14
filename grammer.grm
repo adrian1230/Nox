@@ -1,0 +1,93 @@
+"Start Symbol" = <nox>
+"Case Sensitive" = 'True'
+Comment Line = '#'
+Comment Start = '/?'
+Comment End = '?/'
+Stop = ':'
+Ident = {Letter}{AlphaNumeric}*
+Number = {Digit}+('.'{Digit}+)?
+{String ch} = {Printable} - ["]
+StringLiteral = '"' {String ch}+ '"' 
+
+<nox> ::= program begin stop <Statements> end
+       
+<Statements> ::= <Statement> | <Statements> <Statements>
+             
+<Statement> ::= <Expression> 
+             | <VariableDeclarators> 
+             | <Condition>  
+             | <Loops>
+             | <Counters>
+             | <DataType>
+             | <MethodDeclaration>
+             | <MethodCall>
+             | <Array> 
+             | <Print>
+             | <Input>
+            
+<Expression> ::= <Expression> '>' <Addition>
+              | <Expression> '<' <Addition>
+              | <Expression> '==' <Addition>
+              | <Expression> '>=' <Addition>
+              | <Expression> '<=' <Addition>
+              | <Addition>
+              
+<Addition> ::= <Addition> '+' <Mult>
+            | <Addition> '-' <Mult>
+            | <Mult>
+           
+<Mult> ::= <Mult> '*' <Value>
+        | <Mult> '/' <Value>
+        | <Value>
+       
+<VariableDeclarators> ::= <VariableDeclarator> | <VariableDeclarator> ',' <VariableDeclarator>
+
+<VariableDeclarator> ::= '@'<Value> | '@'<Value> '=' <VariableInitializer>
+                      
+<VariableInitializer> ::= <Expression>
+                      
+<Condition> ::= if <Expression> stop <Statements>
+             | ef <Statements> stop  
+             | ee <Statements>
+             
+<Loops> ::= while <Expression> stop <Statement>
+         | for '(' <Statement> ';' <Statement> ';' <Statement> ')'
+         
+<Counters> ::= <Value> '++' | '++' <Value> | <Value> '+='
+            | <Value> '--' | '--' <Value> | <Value> '-='
+            | <Value> '//' | '//' <Value> | <Value> '/='
+            
+<DataType> ::= <Numeric> 
+          
+<Numeric> ::= <IntegerType> | <FloatingType>
+  
+<IntegerType> ::= 'int' | 'short' | 'char' 
+           
+<FloatingType> ::= 'double' | 'float'
+                
+<MethodDeclaration> ::= def <MethodHeader> <MethodBody>
+                     
+<MethodHeader> ::= <MethodDeclarator> 
+                
+<MethodDeclarator> ::= Ident '(' ')' stop
+                    | Ident '(' <FormalParameter> ')' stop 
+                    
+<FormalParameter> ::= <Parameter> | <Parameter> ',' <Parameter>
+                   
+<Parameter> ::= <DataType> <Value> 
+                    
+<MethodBody> ::= <Statement> 
+              
+<MethodCall> ::= Ident '(' <Argument> ')'
+              
+<Argument> ::= <Value> | <Argument> ',' <Value>
+            
+<Array> ::= <DataType> Ident '[' ']'
+         | <DataType> Ident '[' Number ']' 
+         | <DataType> Ident '[' Number ']' '=' <Value> 
+         
+<Print> ::= print '(' <Value> ')' | print '(' <Expression> ')'
+         
+<Input> ::= ident '=' input '('StringLiteral')'
+
+<Value> ::= Ident | Number | StringLiteral
